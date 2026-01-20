@@ -3,9 +3,42 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/trip_provider.dart';
 import 'add_trip_screen.dart';
+import '../models/trip_model.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  void _confirmDelete(BuildContext context, TripModel trip) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete?'),
+        content: const Text('This cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(), // Закрыть окно
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              // Удаляем через Provider
+              Provider.of<TripProvider>(
+                context,
+                listen: false,
+              ).deleteTrip(trip);
+              Navigator.of(ctx).pop(); // Закрыть окно
+
+              // Показываем сообщение снизу
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Trip deleted successfully')),
+              );
+            },
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,20 +89,37 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Фотография места
-                    if (trip.imagePath.isNotEmpty)
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
-                        child: Image.file(
-                          File(trip.imagePath),
-                          height: 200,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                    Stack(
+                      children: [
+                        if (trip.imagePath.isNotEmpty)
+                          ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(12),
+                            ),
+                            child: Image.file(
+                              File(trip.imagePath),
+                              height: 200,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
 
+                        // Кнопка удаления (справа сверху)
+                        Positioned(
+                          right: 8,
+                          top: 8,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white.withOpacity(0.8),
+                            child: IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () => _confirmDelete(context, trip),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // Фотография места
                     Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(
