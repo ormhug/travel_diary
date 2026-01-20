@@ -80,11 +80,36 @@ class HomeScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           const SizedBox(height: 4),
-                          Text(
-                            // Форматируем дату (просто покажем строку)
-                            "${trip.date.day}/${trip.date.month}/${trip.date.year}",
-                            style: TextStyle(color: Colors.grey[600]),
+
+                          // Дата и Локация в одну строку
+                          Row(
+                            children: [
+                              Text(
+                                "${trip.date.day}/${trip.date.month}/${trip.date.year}",
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                              const Spacer(),
+                              // Если есть координаты - показываем иконку
+                              if (trip.latitude != null)
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      size: 16,
+                                      color: Colors.blue[300],
+                                    ),
+                                    Text(
+                                      " ${trip.latitude!.toStringAsFixed(2)}, ${trip.longitude!.toStringAsFixed(2)}",
+                                      style: TextStyle(
+                                        color: Colors.blue[300],
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ],
                           ),
+
                           const SizedBox(height: 8),
                           Text(
                             trip.description,
