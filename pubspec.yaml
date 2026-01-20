@@ -1,0 +1,38 @@
+name: ha
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  cupertino_icons: ^1.0.2
+
+  # Camera/Gallery (Проще использовать image_picker для фото)
+  image_picker: ^1.0.7
+
+  # GPS Location
+  geolocator: ^10.1.0
+
+  # Advanced Feature: Local Persistent Storage (Hive)
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Advanced Feature: State Management
+  provider: ^6.1.1
+
+  # Utilities
+  intl: ^0.19.0 # Для форматирования дат
+  path_provider: ^2.1.2 # Для путей к файлам
+  permission_handler: ^11.3.0 # Для запроса прав доступа
+
+flutter:
+  uses-material-design: true
