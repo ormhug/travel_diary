@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'models/trip_model.dart';
 import 'providers/trip_provider.dart';
 import 'screens/home_screen.dart';
+import 'services/notification_service.dart';
 
 void main() async {
   // Обязательно для инициализации асинхронных функций до запуска UI
@@ -17,6 +18,8 @@ void main() async {
 
   // Открытие "коробки" (таблицы) с данными
   await Hive.openBox<TripModel>('trips');
+
+  await NotificationService().initNotification();
 
   runApp(const MyApp());
 }

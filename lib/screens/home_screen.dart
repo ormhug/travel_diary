@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/trip_provider.dart';
 import 'add_trip_screen.dart';
 import '../models/trip_model.dart';
+import '../services/notification_service.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -43,7 +44,28 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('My Travel Diary')),
+      appBar: AppBar(
+        title: const Text('My Travel Diary'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_active),
+            onPressed: () {
+              // Вызываем показ уведомления
+              NotificationService().showNotification(
+                title: 'Travel Reminder',
+                body: 'Don\'t forget to log your adventure today! 📸',
+              );
+              // Показываем сообщение снизу, что уведомление отправлено
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Notification sent! Check status bar.'),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+
       // Consumer следит за изменениями в TripProvider
       body: Consumer<TripProvider>(
         builder: (context, tripProvider, child) {
