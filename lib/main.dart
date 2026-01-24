@@ -6,9 +6,15 @@ import 'providers/trip_provider.dart';
 import 'screens/home_screen.dart';
 import 'services/notification_service.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+
 void main() async {
   // Обязательно для инициализации асинхронных функций до запуска UI
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Инициализация Firebase
+  await Firebase.initializeApp();
 
   // Инициализация локальной базы данных (Local Persistent Storage)
   await Hive.initFlutter();
