@@ -1,0 +1,50 @@
+name: Flutter CI
+
+# Когда запускать: при каждом пуше (push) в ветку main
+# It activates after push and pull request events targeting the main branch
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    # На какой машине запускать (виртуальная Ubuntu)\
+    # It runs on the latest version of Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Download code from the repository
+      # 1. Скачиваем код из репозитория
+      - uses: actions/checkout@v4
+
+      # 2. Install Java (needed for Android build)
+      # 2. Устанавливаем Java (нужна для Android сборки)
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # 3. Install Flutter
+      # 3. Устанавливаем Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          channel: 'stable'
+
+      # 4. Get dependencies (libraries)
+      # 4. Скачиваем зависимости (библиотеки)
+      - run: flutter pub get
+
+      # 5. Analyze the code for issues
+      # 5. Проверяем код на ошибки (анализ)
+      - run: flutter analyze
+
+      # 6. Run tests (if any)
+      # 6. Запускаем тесты (если есть)
+      - run: flutter test
+
+      # 7. Try to build APK (to ensure the build works)
+      # 7. Пробуем собрать APK (чтобы убедиться, что билд рабочий)
+      - run: flutter build apk --debug --no-pub
